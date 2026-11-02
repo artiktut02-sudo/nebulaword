@@ -1,92 +1,77 @@
 * { box-sizing: border-box; }
-body {
-  margin: 0;
-  font-family: "Segoe UI", Arial, sans-serif;
-  background: #f3f3f3;
+body { margin: 0; font-family: "Segoe UI", Arial, sans-serif; background: #f3f3f3; }
+
+/* Заголовок окна */
+.titlebar {
+  background: #2b579a; color: #fff;
+  padding: 6px 16px; font-size: 13px;
+  display: flex; gap: 20px; align-items: center;
 }
+.app-name { font-weight: bold; }
+.doc-name { opacity: 0.8; }
+
+/* Вкладки */
+.tab-bar { display: flex; background: #2b579a; padding: 0 10px; }
+.tab {
+  background: transparent; color: #fff;
+  border: none; padding: 8px 20px;
+  cursor: pointer; font-size: 14px;
+}
+.tab.active { background: #f3f3f3; color: #2b579a; font-weight: bold; }
+.tab:hover:not(.active) { background: #3a6fbf; }
 
 /* Лента */
-.ribbon {
-  background: #fff;
-  border-bottom: 1px solid #ccc;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-.tab-bar {
-  display: flex;
-  background: #2b579a; /* синий как в Word */
-}
-.tab {
-  background: transparent;
-  color: #fff;
-  border: none;
-  padding: 8px 20px;
-  cursor: pointer;
-  font-size: 14px;
-}
-.tab.active {
-  background: #fff;
-  color: #2b579a;
-  font-weight: bold;
-}
-
 .toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  padding: 6px 10px;
-  align-items: center;
+  background: #f3f3f3;
+  border-bottom: 1px solid #ccc;
+  display: flex; flex-wrap: wrap; gap: 4px;
+  padding: 6px 10px; align-items: center;
 }
 .group {
-  display: flex;
-  gap: 2px;
-  padding: 0 8px;
-  border-right: 1px solid #ddd;
+  display: flex; gap: 2px; align-items: center;
+  padding: 0 8px; border-right: 1px solid #ddd;
 }
 .group:last-child { border-right: none; }
-
 .toolbar button {
-  background: #f9f9f9;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  padding: 6px 10px;
-  cursor: pointer;
-  font-size: 14px;
-  min-width: 34px;
+  background: #fff; border: 1px solid #ccc; border-radius: 3px;
+  padding: 6px 10px; cursor: pointer; font-size: 13px; min-width: 34px;
 }
 .toolbar button:hover { background: #e6f0ff; border-color: #2b579a; }
 .toolbar button.active { background: #d0e0ff; border-color: #2b579a; }
-
-.toolbar select {
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  font-size: 14px;
+.toolbar select, .toolbar input[type="color"] {
+  padding: 5px; border: 1px solid #ccc; border-radius: 3px; font-size: 13px;
 }
+.toolbar input[type="color"] { padding: 0; width: 34px; height: 30px; }
+.toolbar label { font-size: 12px; display: flex; gap: 5px; align-items: center; }
 
-/* Рабочая область с "листом" */
+/* Рабочая область */
 .workspace {
-  padding: 30px;
-  display: flex;
-  justify-content: center;
-  min-height: calc(100vh - 110px);
+  padding: 20px;
+  display: flex; justify-content: center;
+  min-height: calc(100vh - 170px);
+  overflow: auto;
 }
 .page {
-  background: #fff;
-  width: 816px;      /* A4 в пикселях при 96dpi */
-  min-height: 1056px;
+  background: #fff; width: 816px; min-height: 1056px;
   padding: 60px 70px;
   box-shadow: 0 0 8px rgba(0,0,0,0.2);
+  transition: all 0.2s;
 }
+.page.landscape { width: 1056px; min-height: 816px; }
+.page.cream { background: #fdfaf0; }
+.page.lightblue { background: #f0f8ff; }
 #editor {
   outline: none;
   font-family: "Times New Roman", serif;
-  font-size: 14pt;
-  line-height: 1.5;
-  min-height: 900px;
+  font-size: 14pt; line-height: 1.5; min-height: 900px;
 }
-#editor:focus { outline: none; }
+#editor table { border-collapse: collapse; margin: 6px 0; }
+#editor table td { border: 1px solid #999; padding: 5px; }
+#editor img { max-width: 100%; }
+#editor hr { margin: 12px 0; }
 
-/* Списки */
-#editor ul, #editor ol { margin: 8px 0; padding-left: 30px; }
+/* Статус */
+.statusbar {
+  background: #2b579a; color: #fff; padding: 4px 20px;
+  font-size: 12px; display: flex; gap: 24px;
+}
