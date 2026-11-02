@@ -1,180 +1,274 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title>Документ1 — Редактор</title>
+<title>Документ1 — Word</title>
 <link rel="stylesheet" href="style.css">
+<!-- Подключаем FontAwesome для красивых иконок -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Библиотеки для открытия/сохранения DOCX -->
 <script src="https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html-docx-js@0.3.1/dist/html-docx.js"></script>
 </head>
 <body>
 
-<!-- Шапка (как на скрине) -->
-<div class="top-header">
-  <div class="header-left">
-    <div class="menu-btn"><i class="fas fa-bars"></i> Меню</div>
-    <div class="autosave">
-      <span>Автосохранение файла</span>
-      <label class="switch"><input type="checkbox"><span class="slider"></span></label>
-    </div>
-    <div class="quick-btns">
-      <i class="far fa-save" title="Сохранить" data-act="save-html"></i>
-      <i class="fas fa-folder-open" title="Открыть" data-act="open"></i>
-      <i class="fas fa-undo" title="Отменить" data-cmd="undo"></i>
-      <i class="fas fa-redo" title="Повторить" data-cmd="redo"></i>
-    </div>
+<!-- ===== ШАПКА ===== -->
+<div class="titlebar">
+  <div class="tb-left">
+    <i class="fas fa-file-word word-icon"></i>
+    <span class="doc-name" id="docName">Документ1</span>
+    <span class="saved-badge">Сохранено</span>
   </div>
-  <div class="header-right">
-    <span class="cloud-status"><i class="fas fa-cloud"></i> Не в облаке</span>
-    <div class="user-avatar">М</div>
+  <div class="tb-right">
+    <span class="user-info">Мама</span>
+    <div class="avatar">М</div>
   </div>
 </div>
 
-<!-- Вкладки -->
-<div class="tab-bar">
-  <div class="tab active" data-tab="home">Главная</div>
-  <div class="tab" data-tab="insert">Вставка</div>
-  <div class="tab" data-tab="layout">Разметка страницы</div>
-  <div class="tab" data-tab="references">Ссылки</div>
-  <div class="tab" data-tab="review">Рецензирование</div>
-  <div class="tab" data-tab="view">Вид</div>
-  <div class="tab" data-tab="tools">Инструменты</div>
-</div>
-
-<!-- Панель инструментов (как на скрине) -->
-<div class="toolbar" id="tb-home">
-  
-  <!-- Группа: Буфер обмена -->
-  <div class="group">
-    <div class="group-content">
-      <div class="btn-col" data-act="format-painter">
-        <i class="fas fa-paint-brush"></i>
-        <span>Формат<br>по образцу</span>
-      </div>
-      <div class="btn-col" data-cmd="paste">
-        <i class="fas fa-paste"></i>
-        <span>Вставить</span>
-      </div>
-      <div class="btn-col small">
-        <i class="fas fa-cut" data-cmd="cut" title="Вырезать"></i>
-        <i class="fas fa-copy" data-cmd="copy" title="Копировать"></i>
-      </div>
-    </div>
-    <div class="group-title">Буфер обмена</div>
+<!-- ===== ВКЛАДКИ ===== -->
+<div class="ribbon">
+  <div class="tab-bar">
+    <button class="tab" data-tab="file"><i class="fas fa-bars"></i> Файл</button>
+    <button class="tab active" data-tab="home">Главная</button>
+    <button class="tab" data-tab="insert">Вставка</button>
+    <button class="tab" data-tab="design">Дизайн</button>
+    <button class="tab" data-tab="layout">Макет</button>
+    <button class="tab" data-tab="references">Ссылки</button>
+    <button class="tab" data-tab="review">Рецензирование</button>
+    <button class="tab" data-tab="view">Вид</button>
   </div>
 
-  <!-- Группа: Шрифт -->
-  <div class="group">
-    <div class="group-content column">
-      <div class="row">
-        <select id="font-family" class="sel-font">
-          <option>Calibri (Основной)</option>
-          <option>Times New Roman</option>
-          <option>Arial</option>
-          <option>Georgia</option>
+  <!-- ================= ГЛАВНАЯ ================= -->
+  <div class="panel active" id="tb-home">
+    
+    <!-- Буфер обмена -->
+    <div class="grp">
+      <div class="grp-title">Буфер обмена</div>
+      <div class="grp-body">
+        <button class="btn-big" data-cmd="paste"><i class="fas fa-paste"></i><span>Вставить</span></button>
+        <div class="btn-col">
+          <button data-cmd="cut" title="Вырезать"><i class="fas fa-cut"></i></button>
+          <button data-cmd="copy" title="Копировать"><i class="fas fa-copy"></i></button>
+          <button data-act="format-painter" title="Формат по образцу"><i class="fas fa-paint-brush"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Шрифт -->
+    <div class="grp">
+      <div class="grp-title">Шрифт</div>
+      <div class="grp-body column">
+        <div class="row">
+          <select id="font-family" class="sel-font">
+            <option>Calibri</option><option>Times New Roman</option>
+            <option>Arial</option><option>Georgia</option><option>Courier New</option>
+          </select>
+          <select id="font-size">
+            <option>8</option><option>9</option><option>10</option><option>11</option>
+            <option>12</option><option>14</option><option>16</option><option>18</option>
+            <option>24</option><option>32</option>
+          </select>
+          <button data-act="grow-font" title="Увеличить"><i class="fas fa-search-plus"></i></button>
+          <button data-act="shrink-font" title="Уменьшить"><i class="fas fa-search-minus"></i></button>
+        </div>
+        <div class="row">
+          <button data-cmd="bold" title="Жирный"><b>Ж</b></button>
+          <button data-cmd="italic" title="Курсив"><i>К</i></button>
+          <button data-cmd="underline" title="Подчёркнутый"><u>Ч</u></button>
+          <button data-cmd="strikeThrough" title="Зачёркнутый"><s>З</s></button>
+          <button data-cmd="subscript" title="Нижний индекс">X<sub>2</sub></button>
+          <button data-cmd="superscript" title="Верхний индекс">X<sup>2</sup></button>
+          <input type="color" id="text-color" value="#000000" title="Цвет текста">
+          <input type="color" id="highlight-color" value="#ffff00" title="Цвет выделения">
+        </div>
+      </div>
+    </div>
+
+    <!-- Абзац -->
+    <div class="grp">
+      <div class="grp-title">Абзац</div>
+      <div class="grp-body column">
+        <div class="row">
+          <button data-cmd="insertUnorderedList" title="Маркированный список"><i class="fas fa-list-ul"></i></button>
+          <button data-cmd="insertOrderedList" title="Нумерованный список"><i class="fas fa-list-ol"></i></button>
+          <button data-cmd="outdent" title="Уменьшить отступ"><i class="fas fa-outdent"></i></button>
+          <button data-cmd="indent" title="Увеличить отступ"><i class="fas fa-indent"></i></button>
+        </div>
+        <div class="row">
+          <button data-cmd="justifyLeft" title="По левому краю"><i class="fas fa-align-left"></i></button>
+          <button data-cmd="justifyCenter" title="По центру"><i class="fas fa-align-center"></i></button>
+          <button data-cmd="justifyRight" title="По правому краю"><i class="fas fa-align-right"></i></button>
+          <button data-cmd="justifyFull" title="По ширине"><i class="fas fa-align-justify"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Стили -->
+    <div class="grp">
+      <div class="grp-title">Стили</div>
+      <div class="grp-body">
+        <button class="style-btn active" data-act="style-normal">Обычный</button>
+        <button class="style-btn bold" data-act="style-heading">Заголовок 1</button>
+        <button class="style-btn" data-act="style-quote">Цитата</button>
+      </div>
+    </div>
+
+    <!-- Редактирование -->
+    <div class="grp">
+      <div class="grp-title">Редактирование</div>
+      <div class="grp-body column">
+        <div class="row">
+          <button class="btn-text" data-act="find"><i class="fas fa-search"></i> Найти</button>
+          <button class="btn-text" data-act="replace"><i class="fas fa-exchange-alt"></i> Заменить</button>
+        </div>
+        <div class="row">
+          <button class="btn-text" data-act="select-all"><i class="fas fa-mouse-pointer"></i> Выделить всё</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ================= ФАЙЛ ================= -->
+  <div class="panel" id="tb-file">
+    <div class="file-menu">
+      <div class="file-item" data-act="new"><i class="fas fa-file"></i> Создать</div>
+      <div class="file-item" data-act="open"><i class="fas fa-folder-open"></i> Открыть</div>
+      <div class="file-item" data-act="save-html"><i class="fas fa-save"></i> Сохранить (HTML)</div>
+      <div class="file-item" data-act="save-docx"><i class="fas fa-file-word"></i> Сохранить (DOCX)</div>
+      <div class="file-item" data-act="print"><i class="fas fa-print"></i> Печать</div>
+    </div>
+  </div>
+
+  <!-- ================= ВСТАВКА ================= -->
+  <div class="panel" id="tb-insert">
+    <div class="grp">
+      <div class="grp-title">Иллюстрации</div>
+      <div class="grp-body">
+        <button class="btn-big" data-act="image"><i class="fas fa-image"></i><span>Картинка</span></button>
+        <button class="btn-big" data-act="shapes"><i class="fas fa-shapes"></i><span>Фигуры</span></button>
+      </div>
+    </div>
+    <div class="grp">
+      <div class="grp-title">Таблицы</div>
+      <div class="grp-body">
+        <button class="btn-big" data-act="table"><i class="fas fa-table"></i><span>Таблица</span></button>
+      </div>
+    </div>
+    <div class="grp">
+      <div class="grp-title">Ссылки</div>
+      <div class="grp-body">
+        <button class="btn-big" data-act="link"><i class="fas fa-link"></i><span>Ссылка</span></button>
+        <button class="btn-big" data-act="bookmark"><i class="fas fa-bookmark"></i><span>Закладка</span></button>
+      </div>
+    </div>
+    <div class="grp">
+      <div class="grp-title">Текст</div>
+      <div class="grp-body">
+        <button class="btn-big" data-act="date"><i class="fas fa-calendar"></i><span>Дата</span></button>
+        <button class="btn-big" data-act="symbol"><i class="fas fa-font"></i><span>Символ</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= ДИЗАЙН ================= -->
+  <div class="panel" id="tb-design">
+    <div class="grp">
+      <div class="grp-title">Темы</div>
+      <div class="grp-body">
+        <select id="theme-select">
+          <option value="default">Стандартная</option>
+          <option value="cream">Кремовая</option>
+          <option value="lightblue">Голубая</option>
+          <option value="sepia">Сепия</option>
+          <option value="dark">Тёмная</option>
         </select>
-        <select id="font-size">
-          <option>8</option><option>9</option><option>10</option><option selected>11</option>
-          <option>12</option><option>14</option><option>16</option><option>18</option><option>24</option>
-        </select>
-        <i class="fas fa-search-plus" data-act="grow-font" title="Увеличить шрифт"></i>
-        <i class="fas fa-search-minus" data-act="shrink-font" title="Уменьшить шрифт"></i>
-        <i class="fas fa-font" data-act="change-case" title="Регистр"></i>
-        <i class="fas fa-eraser" data-act="clear-format" title="Очистить формат"></i>
-      </div>
-      <div class="row">
-        <button data-cmd="bold" class="txt-btn"><b>Ж</b></button>
-        <button data-cmd="italic" class="txt-btn"><i>К</i></button>
-        <button data-cmd="underline" class="txt-btn"><u>Ч</u></button>
-        <button data-cmd="strikeThrough" class="txt-btn"><s>З</s></button>
-        <button data-cmd="subscript" class="txt-btn">X<sub>2</sub></button>
-        <button data-cmd="superscript" class="txt-btn">X<sup>2</sup></button>
-        <i class="fas fa-highlighter" data-act="highlight" title="Выделить"></i>
-        <input type="color" id="text-color" value="#000000" title="Цвет текста">
       </div>
     </div>
-    <div class="group-title">Шрифт</div>
   </div>
 
-  <!-- Группа: Абзац -->
-  <div class="group">
-    <div class="group-content column">
-      <div class="row">
-        <i class="fas fa-list-ul" data-cmd="insertUnorderedList" title="Маркированный список"></i>
-        <i class="fas fa-list-ol" data-cmd="insertOrderedList" title="Нумерованный список"></i>
-        <i class="fas fa-tasks" data-act="checklist" title="Чек-лист"></i>
-        <i class="fas fa-outdent" data-cmd="outdent" title="Уменьшить отступ"></i>
-        <i class="fas fa-indent" data-cmd="indent" title="Увеличить отступ"></i>
-      </div>
-      <div class="row">
-        <i class="fas fa-align-left" data-cmd="justifyLeft"></i>
-        <i class="fas fa-align-center" data-cmd="justifyCenter"></i>
-        <i class="fas fa-align-right" data-cmd="justifyRight"></i>
-        <i class="fas fa-align-justify" data-cmd="justifyFull"></i>
-        <i class="fas fa-arrows-alt-v" data-act="line-spacing" title="Интервал"></i>
-        <i class="fas fa-border-all" data-act="borders" title="Границы"></i>
+  <!-- ================= МАКЕТ ================= -->
+  <div class="panel" id="tb-layout">
+    <div class="grp">
+      <div class="grp-title">Параметры страницы</div>
+      <div class="grp-body column">
+        <div class="row">
+          <select id="margins">
+            <option value="60px 70px">Обычные поля</option>
+            <option value="30px 30px">Узкие</option>
+            <option value="90px 120px">Широкие</option>
+            <option value="0px 0px">Без полей</option>
+          </select>
+        </div>
+        <div class="row">
+          <select id="orientation">
+            <option value="portrait">Книжная</option>
+            <option value="landscape">Альбомная</option>
+          </select>
+        </div>
       </div>
     </div>
-    <div class="group-title">Абзац</div>
   </div>
 
-  <!-- Группа: Стили -->
-  <div class="group">
-    <div class="group-content">
-      <div class="style-box active" data-act="style-normal">
-        <span>Обычный</span>
+  <!-- ================= ССЫЛКИ ================= -->
+  <div class="panel" id="tb-references">
+    <div class="grp">
+      <div class="grp-title">Оглавление</div>
+      <div class="grp-body">
+        <button class="btn-big" data-act="toc"><i class="fas fa-list"></i><span>Оглавление</span></button>
       </div>
-      <div class="style-box bold" data-act="style-heading">
-        <span>Заголовок 1</span>
-      </div>
-      <i class="fas fa-chevron-down" style="align-self: center; padding: 0 5px;"></i>
     </div>
-    <div class="group-title">Стили</div>
+    <div class="grp">
+      <div class="grp-title">Сноски</div>
+      <div class="grp-body">
+        <button class="btn-big" data-act="footnote"><i class="fas fa-superscript"></i><span>Сноска</span></button>
+      </div>
+    </div>
   </div>
 
-  <!-- Группа: Редактирование -->
-  <div class="group">
-    <div class="group-content column">
-      <div class="row">
-        <i class="fas fa-search" data-act="find"></i>
-        <span>Поиск и<br>замена</span>
-      </div>
-      <div class="row">
-        <i class="fas fa-spell-check" data-act="spell"></i>
-        <span>Проверка<br>орфографии</span>
+  <!-- ================= РЕЦЕНЗИРОВАНИЕ ================= -->
+  <div class="panel" id="tb-review">
+    <div class="grp">
+      <div class="grp-title">Правописание</div>
+      <div class="grp-body">
+        <button class="btn-big" data-act="spell"><i class="fas fa-spell-check"></i><span>Орфография</span></button>
+        <button class="btn-big" data-act="wordcount"><i class="fas fa-chart-bar"></i><span>Статистика</span></button>
       </div>
     </div>
-    <div class="group-title">Редактирование</div>
   </div>
 
-  <!-- Группа: Выделение -->
-  <div class="group">
-    <div class="group-content column">
-      <div class="row"><i class="fas fa-mouse-pointer" data-act="select-all"></i><span>Выделить</span></div>
+  <!-- ================= ВИД ================= -->
+  <div class="panel" id="tb-view">
+    <div class="grp">
+      <div class="grp-title">Масштаб</div>
+      <div class="grp-body">
+        <button class="btn-big" data-act="zoom-out"><i class="fas fa-search-minus"></i><span>Уменьшить</span></button>
+        <span id="zoom-label" style="margin: 0 10px; font-weight: bold;">100%</span>
+        <button class="btn-big" data-act="zoom-in"><i class="fas fa-search-plus"></i><span>Увеличить</span></button>
+      </div>
     </div>
-    <div class="group-title">Выделение</div>
   </div>
 
 </div>
 
-<!-- Рабочая область (лист) -->
+<!-- ===== РАБОЧАЯ ОБЛАСТЬ ===== -->
 <div class="workspace">
   <div class="page" id="page">
-    <div id="editor" contenteditable="true"></div>
+    <!-- Здесь СРАЗУ пусто, никаких подсказок. Ставь курсор и печатай. -->
+    <div id="editor" contenteditable="true" spellcheck="true"></div>
   </div>
 </div>
 
-<!-- Статус-бар -->
+<!-- ===== СТАТУС-БАР ===== -->
 <div class="statusbar">
+  <span id="stat-page">Стр. 1</span>
   <span id="stat-words">Слов: 0</span>
   <span id="stat-chars">Символов: 0</span>
-  <span id="stat-pages">Страниц: 1</span>
-  <span id="stat-lang">Русский</span>
+  <span style="margin-left: auto;">Русский (Россия)</span>
 </div>
 
-<input type="file" id="file-input" style="display:none">
+<input type="file" id="file-input" accept=".txt,.html,.docx" style="display:none">
+<input type="file" id="image-input" accept="image/*" style="display:none">
 <script src="script.js"></script>
 </body>
 </html>
