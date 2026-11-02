@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Мамин Редактор</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Лента как в Word -->
+<div class="ribbon">
+  <div class="tab-bar">
+    <button class="tab active">Главная</button>
+    <button class="tab">Вставка</button>
+    <button class="tab">Вид</button>
+  </div>
+
+  <div class="toolbar">
+    <div class="group">
+      <button id="btn-undo" title="Отменить">↶</button>
+      <button id="btn-redo" title="Повторить">↷</button>
+    </div>
+
+    <div class="group">
+      <select id="font-family">
+        <option>Times New Roman</option>
+        <option>Arial</option>
+        <option>Calibri</option>
+        <option>Courier New</option>
+        <option>Georgia</option>
+      </select>
+      <select id="font-size">
+        <option>10</option><option>11</option><option>12</option>
+        <option selected>14</option><option>16</option>
+        <option>18</option><option>24</option><option>32</option>
+      </select>
+    </div>
+
+    <div class="group">
+      <button id="btn-bold" title="Жирный"><b>Ж</b></button>
+      <button id="btn-italic" title="Курсив"><i>К</i></button>
+      <button id="btn-underline" title="Подчёркнутый"><u>Ч</u></button>
+      <button id="btn-strike" title="Зачёркнутый"><s>З</s></button>
+    </div>
+
+    <div class="group">
+      <button id="btn-align-left" title="По левому краю">≡←</button>
+      <button id="btn-align-center" title="По центру">≡↔</button>
+      <button id="btn-align-right" title="По правому краю">→≡</button>
+      <button id="btn-align-justify" title="По ширине">≡≡</button>
+    </div>
+
+    <div class="group">
+      <button id="btn-ul" title="Маркированный список">• Список</button>
+      <button id="btn-ol" title="Нумерованный список">1. Список</button>
+    </div>
+
+    <div class="group">
+      <button id="btn-open" title="Открыть">📂 Открыть</button>
+      <button id="btn-save" title="Сохранить">💾 Сохранить</button>
+      <button id="btn-print" title="Печать">🖨 Печать</button>
+    </div>
+  </div>
+</div>
+
+<!-- Лист как в Word -->
+<div class="workspace">
+  <div class="page">
+    <div id="editor" contenteditable="true" spellcheck="true">
+      <p>Здравствуй, мама! Начни печатать здесь...</p>
+    </div>
+  </div>
+</div>
+
+<!-- Скрытый input для открытия файлов -->
+<input type="file" id="file-input" accept=".txt,.html,.doc" style="display:none">
+
+<script src="script.js"></script>
+</body>
+</html>
