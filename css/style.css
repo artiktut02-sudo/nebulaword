@@ -1,0 +1,92 @@
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #f3f3f3;
+}
+
+/* Лента */
+.ribbon {
+  background: #fff;
+  border-bottom: 1px solid #ccc;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.tab-bar {
+  display: flex;
+  background: #2b579a; /* синий как в Word */
+}
+.tab {
+  background: transparent;
+  color: #fff;
+  border: none;
+  padding: 8px 20px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.tab.active {
+  background: #fff;
+  color: #2b579a;
+  font-weight: bold;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 6px 10px;
+  align-items: center;
+}
+.group {
+  display: flex;
+  gap: 2px;
+  padding: 0 8px;
+  border-right: 1px solid #ddd;
+}
+.group:last-child { border-right: none; }
+
+.toolbar button {
+  background: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  min-width: 34px;
+}
+.toolbar button:hover { background: #e6f0ff; border-color: #2b579a; }
+.toolbar button.active { background: #d0e0ff; border-color: #2b579a; }
+
+.toolbar select {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 14px;
+}
+
+/* Рабочая область с "листом" */
+.workspace {
+  padding: 30px;
+  display: flex;
+  justify-content: center;
+  min-height: calc(100vh - 110px);
+}
+.page {
+  background: #fff;
+  width: 816px;      /* A4 в пикселях при 96dpi */
+  min-height: 1056px;
+  padding: 60px 70px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.2);
+}
+#editor {
+  outline: none;
+  font-family: "Times New Roman", serif;
+  font-size: 14pt;
+  line-height: 1.5;
+  min-height: 900px;
+}
+#editor:focus { outline: none; }
+
+/* Списки */
+#editor ul, #editor ol { margin: 8px 0; padding-left: 30px; }
