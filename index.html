@@ -2,18 +2,22 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title>Мамин Редактор — почти Word</title>
+<title>Редактор документов</title>
 <link rel="stylesheet" href="style.css">
-<!-- Библиотеки для docx -->
 <script src="https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html-docx-js@0.3.1/dist/html-docx.js"></script>
 </head>
 <body>
 
-<!-- Верхняя панель как в Word -->
+<!-- Шапка -->
 <div class="titlebar">
-  <span class="app-name">Мамин Редактор</span>
-  <span class="doc-name" id="docName">Документ1</span>
+  <div class="quick-access">
+    <button title="Сохранить" id="qa-save">💾</button>
+    <button title="Отменить" id="qa-undo">↶</button>
+    <button title="Повторить" id="qa-redo">↷</button>
+    <button title="Печать" id="qa-print">🖨</button>
+  </div>
+  <div class="doc-title" id="docName">Документ1 — Редактор</div>
 </div>
 
 <!-- Вкладки -->
@@ -25,179 +29,317 @@
     <button class="tab" data-tab="design">Дизайн</button>
     <button class="tab" data-tab="layout">Макет</button>
     <button class="tab" data-tab="references">Ссылки</button>
+    <button class="tab" data-tab="mailings">Рассылки</button>
     <button class="tab" data-tab="review">Рецензирование</button>
     <button class="tab" data-tab="view">Вид</button>
+    <button class="tab" data-tab="help">Справка</button>
   </div>
 
-  <!-- ФАЙЛ -->
+  <!-- ===================== ФАЙЛ ===================== -->
   <div class="toolbar" id="tb-file" style="display:none">
-    <div class="group">
-      <button id="btn-new">📄 Создать</button>
-      <button id="btn-open">📂 Открыть</button>
-      <button id="btn-save">💾 Сохранить</button>
+    <div class="group"><div class="group-title">Создать</div>
+      <button data-act="new">📄 Новый</button>
+      <button data-act="template">📋 С шаблона</button>
     </div>
-    <div class="group">
-      <button id="btn-save-html">Сохранить как HTML</button>
-      <button id="btn-save-docx">Сохранить как DOCX</button>
+    <div class="group"><div class="group-title">Открыть</div>
+      <button data-act="open">📂 Открыть (.txt/.html/.docx)</button>
+      <button data-act="open-recent">🕘 Последние</button>
     </div>
-    <div class="group">
-      <button id="btn-print">🖨 Печать</button>
+    <div class="group"><div class="group-title">Сохранить</div>
+      <button data-act="save-html">💾 HTML</button>
+      <button data-act="save-docx">📝 DOCX</button>
+      <button data-act="save-txt">📃 TXT</button>
+      <button data-act="save-pdf">📕 PDF</button>
+    </div>
+    <div class="group"><div class="group-title">Печать</div>
+      <button data-act="print">🖨 Печать</button>
+      <button data-act="print-preview">👁 Предпросмотр</button>
+    </div>
+    <div class="group"><div class="group-title">Экспорт</div>
+      <button data-act="export-json">JSON</button>
+      <button data-act="share">📤 Поделиться</button>
+    </div>
+    <div class="group"><div class="group-title">Информация</div>
+      <button data-act="doc-info">ℹ Свойства</button>
+      <button data-act="doc-protect">🔒 Защита</button>
     </div>
   </div>
 
-  <!-- ГЛАВНАЯ -->
+  <!-- ===================== ГЛАВНАЯ ===================== -->
   <div class="toolbar" id="tb-home">
-    <div class="group">
-      <button id="btn-paste" title="Вставить">📋 Вставить</button>
-      <button id="btn-cut" title="Вырезать">✂️</button>
-      <button id="btn-copy" title="Копировать">📑</button>
+    <div class="group"><div class="group-title">Буфер</div>
+      <button data-cmd="paste">📥 Вставить</button>
+      <button data-cmd="cut">✂️</button>
+      <button data-cmd="copy">📑</button>
+      <button data-act="format-painter">🖌 Формат</button>
     </div>
-    <div class="group">
+    <div class="group"><div class="group-title">Шрифт</div>
       <select id="font-family">
-        <option>Times New Roman</option>
-        <option>Arial</option>
-        <option>Calibri</option>
-        <option>Courier New</option>
-        <option>Georgia</option>
-        <option>Verdana</option>
+        <option>Times New Roman</option><option>Arial</option><option>Calibri</option>
+        <option>Courier New</option><option>Georgia</option><option>Verdana</option>
+        <option>Tahoma</option><option>Segoe UI</option><option>Impact</option>
+        <option>Comic Sans MS</option><option>Consolas</option>
       </select>
       <select id="font-size">
-        <option>8</option><option>9</option><option>10</option>
-        <option>11</option><option>12</option><option selected>14</option>
-        <option>16</option><option>18</option><option>20</option>
-        <option>24</option><option>28</option><option>32</option>
-        <option>48</option>
+        <option>8</option><option>9</option><option>10</option><option>11</option>
+        <option>12</option><option>13</option><option selected>14</option>
+        <option>16</option><option>18</option><option>20</option><option>22</option>
+        <option>24</option><option>26</option><option>28</option><option>32</option>
+        <option>36</option><option>48</option><option>72</option>
       </select>
-      <button id="btn-grow">A+</button>
-      <button id="btn-shrink">A−</button>
+      <button data-act="grow-font">A+</button>
+      <button data-act="shrink-font">A−</button>
+      <button data-act="clear-format">🧹 Очистить</button>
     </div>
-    <div class="group">
-      <button id="btn-bold"><b>Ж</b></button>
-      <button id="btn-italic"><i>К</i></button>
-      <button id="btn-underline"><u>Ч</u></button>
-      <button id="btn-strike"><s>З</s></button>
-      <button id="btn-subscript">X₂</button>
-      <button id="btn-superscript">X²</button>
+    <div class="group"><div class="group-title">Начертание</div>
+      <button data-cmd="bold"><b>Ж</b></button>
+      <button data-cmd="italic"><i>К</i></button>
+      <button data-cmd="underline"><u>Ч</u></button>
+      <button data-cmd="strikeThrough"><s>З</s></button>
+      <button data-cmd="subscript">X₂</button>
+      <button data-cmd="superscript">X²</button>
     </div>
-    <div class="group">
+    <div class="group"><div class="group-title">Цвет</div>
       <input type="color" id="text-color" value="#000000" title="Цвет текста">
-      <input type="color" id="highlight-color" value="#ffff00" title="Цвет выделения">
+      <input type="color" id="highlight-color" value="#ffff00" title="Выделение">
     </div>
-    <div class="group">
-      <button id="btn-ul">• Список</button>
-      <button id="btn-ol">1. Список</button>
-      <button id="btn-indent">→ Отступ</button>
-      <button id="btn-outdent">← Отступ</button>
+    <div class="group"><div class="group-title">Абзац</div>
+      <button data-cmd="insertUnorderedList">• •</button>
+      <button data-cmd="insertOrderedList">1.</button>
+      <button data-act="checklist">☑ Чек-лист</button>
+      <button data-cmd="outdent">← Отступ</button>
+      <button data-cmd="indent">→ Отступ</button>
     </div>
-    <div class="group">
-      <button id="btn-align-left">⯇</button>
-      <button id="btn-align-center">☰</button>
-      <button id="btn-align-right">⯈</button>
-      <button id="btn-align-justify">≡</button>
+    <div class="group"><div class="group-title">Выравнивание</div>
+      <button data-cmd="justifyLeft">⯇</button>
+      <button data-cmd="justifyCenter">≡</button>
+      <button data-cmd="justifyRight">⯈</button>
+      <button data-cmd="justifyFull">≡≡</button>
     </div>
-    <div class="group">
-      <button id="btn-undo">↶</button>
-      <button id="btn-redo">↷</button>
+    <div class="group"><div class="group-title">Стили</div>
+      <select id="style-select">
+        <option value="p">Обычный</option>
+        <option value="h1">Заголовок 1</option>
+        <option value="h2">Заголовок 2</option>
+        <option value="h3">Заголовок 3</option>
+        <option value="blockquote">Цитата</option>
+        <option value="pre">Код</option>
+      </select>
+    </div>
+    <div class="group"><div class="group-title">Редактирование</div>
+      <button data-act="find">🔍 Найти</button>
+      <button data-act="replace">🔁 Заменить</button>
+      <button data-act="select-all">Выделить всё</button>
     </div>
   </div>
 
-  <!-- ВСТАВКА -->
+  <!-- ===================== ВСТАВКА ===================== -->
   <div class="toolbar" id="tb-insert" style="display:none">
-    <div class="group">
-      <button id="btn-image">🖼 Изображение</button>
+    <div class="group"><div class="group-title">Страницы</div>
+      <button data-act="page-break">⤓ Разрыв страницы</button>
+      <button data-act="cover">📄 Титульная</button>
+      <button data-act="blank-page">📃 Пустая</button>
     </div>
-    <div class="group">
-      <button id="btn-link">🔗 Ссылка</button>
-      <button id="btn-hr">— Горизонтальная линия</button>
+    <div class="group"><div class="group-title">Таблица</div>
+      <button data-act="table">▦ Таблица</button>
+      <button data-act="table-draw">✏ Нарисовать</button>
+      <button data-act="table-convert">Преобразовать</button>
     </div>
-    <div class="group">
-      <button id="btn-table">▦ Таблица</button>
+    <div class="group"><div class="group-title">Иллюстрации</div>
+      <button data-act="image">🖼 Картинка</button>
+      <button data-act="shapes">◼ Фигуры</button>
+      <button data-act="chart">📊 Диаграмма</button>
+      <button data-act="icons">😀 Значки</button>
+      <button data-act="smartart">📐 SmartArt</button>
     </div>
-    <div class="group">
-      <button id="btn-date">📅 Дата</button>
-      <button id="btn-time">⏰ Время</button>
+    <div class="group"><div class="group-title">Ссылки</div>
+      <button data-act="link">🔗 Ссылка</button>
+      <button data-act="bookmark">🔖 Закладка</button>
+      <button data-act="cross-ref">↔ Перекрёстная</button>
     </div>
-    <div class="group">
-      <button id="btn-page-break">⤓ Разрыв страницы</button>
+    <div class="group"><div class="group-title">Колонтитулы</div>
+      <button data-act="header">↑ Верхний</button>
+      <button data-act="footer">↓ Нижний</button>
+      <button data-act="page-num">№ Номер</button>
+    </div>
+    <div class="group"><div class="group-title">Текст</div>
+      <button data-act="textbox">📝 Надпись</button>
+      <button data-act="date">📅 Дата</button>
+      <button data-act="time">⏰ Время</button>
+      <button data-act="symbol">Ω Символ</button>
+      <button data-act="emoji">😊 Эмодзи</button>
+    </div>
+    <div class="group"><div class="group-title">Медиа</div>
+      <button data-act="video">🎬 Видео</button>
+      <button data-act="audio">🎵 Аудио</button>
+      <button data-act="qr">🔲 QR-код</button>
     </div>
   </div>
 
-  <!-- ДИЗАЙН -->
+  <!-- ===================== ДИЗАЙН ===================== -->
   <div class="toolbar" id="tb-design" style="display:none">
-    <div class="group">
-      <label>Тема листа:
-        <select id="page-theme">
-          <option value="white">Белый</option>
-          <option value="cream">Кремовый</option>
-          <option value="lightblue">Голубой</option>
-        </select>
-      </label>
+    <div class="group"><div class="group-title">Темы</div>
+      <select id="theme-select">
+        <option value="default">Стандартная</option>
+        <option value="cream">Кремовая</option>
+        <option value="lightblue">Голубая</option>
+        <option value="dark">Тёмная</option>
+        <option value="sepia">Сепия</option>
+      </select>
     </div>
-    <div class="group">
-      <label>Цвет текста по умолчанию: <input type="color" id="default-text" value="#000000"></label>
+    <div class="group"><div class="group-title">Цвета</div>
+      <button data-act="font-color-default">Цвет текста</button>
+      <button data-act="bg-color-default">Цвет фона</button>
+    </div>
+    <div class="group"><div class="group-title">Оформление</div>
+      <button data-act="watermark">💧 Водяной знак</button>
+      <button data-act="page-color">🎨 Цвет страницы</button>
+      <button data-act="page-border">🖼 Границы</button>
+    </div>
+    <div class="group"><div class="group-title">Стили</div>
+      <button data-act="style-normal">Обычный</button>
+      <button data-act="style-heading">Заголовок</button>
+      <button data-act="style-quote">Цитата</button>
     </div>
   </div>
 
-  <!-- МАКЕТ -->
+  <!-- ===================== МАКЕТ ===================== -->
   <div class="toolbar" id="tb-layout" style="display:none">
-    <div class="group">
-      <label>Поля:
-        <select id="margins">
-          <option value="normal">Обычные</option>
-          <option value="narrow">Узкие</option>
-          <option value="wide">Широкие</option>
-        </select>
-      </label>
+    <div class="group"><div class="group-title">Поля</div>
+      <select id="margins">
+        <option value="60px 70px">Обычные</option>
+        <option value="30px 30px">Узкие</option>
+        <option value="90px 120px">Широкие</option>
+        <option value="0px 0px">Без полей</option>
+      </select>
     </div>
-    <div class="group">
-      <label>Ориентация:
-        <select id="orientation">
-          <option value="portrait">Книжная</option>
-          <option value="landscape">Альбомная</option>
-        </select>
-      </label>
+    <div class="group"><div class="group-title">Ориентация</div>
+      <select id="orientation">
+        <option value="portrait">Книжная</option>
+        <option value="landscape">Альбомная</option>
+      </select>
     </div>
-    <div class="group">
-      <label>Межстрочный:
-        <select id="line-height">
-          <option value="1">1.0</option>
-          <option value="1.15">1.15</option>
-          <option value="1.5" selected>1.5</option>
-          <option value="2">2.0</option>
-        </select>
-      </label>
+    <div class="group"><div class="group-title">Размер</div>
+      <select id="page-size">
+        <option value="A4">A4</option>
+        <option value="A5">A5</option>
+        <option value="Letter">Letter</option>
+        <option value="Legal">Legal</option>
+      </select>
+    </div>
+    <div class="group"><div class="group-title">Интервал</div>
+      <select id="line-height">
+        <option value="1">1.0</option><option value="1.15">1.15</option>
+        <option value="1.5" selected>1.5</option><option value="2">2.0</option>
+        <option value="2.5">2.5</option>
+      </select>
+      <button data-act="space-before">Абзац ↑</button>
+      <button data-act="space-after">Абзац ↓</button>
+    </div>
+    <div class="group"><div class="group-title">Колонки</div>
+      <button data-act="cols-1">1 колонка</button>
+      <button data-act="cols-2">2 колонки</button>
+      <button data-act="cols-3">3 колонки</button>
+    </div>
+    <div class="group"><div class="group-title">Расположение</div>
+      <button data-act="rotate">↻ Повернуть</button>
+      <button data-act="align-object">Выровнять</button>
+      <button data-act="wrap-text">Обтекание</button>
     </div>
   </div>
 
-  <!-- ССЫЛКИ -->
+  <!-- ===================== ССЫЛКИ ===================== -->
   <div class="toolbar" id="tb-references" style="display:none">
-    <div class="group">
-      <button id="btn-toc">📑 Оглавление</button>
+    <div class="group"><div class="group-title">Оглавление</div>
+      <button data-act="toc">📑 Вставить</button>
+      <button data-act="toc-update">↻ Обновить</button>
     </div>
-    <div class="group">
-      <button id="btn-footnote">Сноска</button>
+    <div class="group"><div class="group-title">Сноски</div>
+      <button data-act="footnote">Сноска</button>
+      <button data-act="endnote">Концевая</button>
+      <button data-act="next-footnote">→ След.</button>
+    </div>
+    <div class="group"><div class="group-title">Цитирование</div>
+      <button data-act="citation">Вставить</button>
+      <button data-act="bibliography">Библиография</button>
+    </div>
+    <div class="group"><div class="group-title">Предметный указатель</div>
+      <button data-act="mark-entry">Отметить</button>
+      <button data-act="insert-index">Вставить</button>
     </div>
   </div>
 
-  <!-- РЕЦЕНЗИРОВАНИЕ -->
+  <!-- ===================== РАССЫЛКИ ===================== -->
+  <div class="toolbar" id="tb-mailings" style="display:none">
+    <div class="group"><div class="group-title">Создать</div>
+      <button data-act="envelopes">✉ Конверты</button>
+      <button data-act="labels">🏷 Наклейки</button>
+    </div>
+    <div class="group"><div class="group-title">Слияние</div>
+      <button data-act="mail-merge">Слияние</button>
+      <button data-act="select-recipients">Получатели</button>
+      <button data-act="preview-results">Предпросмотр</button>
+    </div>
+    <div class="group"><div class="group-title">Поля</div>
+      <button data-act="greeting">Приветствие</button>
+      <button data-act="merge-field">Поле</button>
+    </div>
+  </div>
+
+  <!-- ===================== РЕЦЕНЗИРОВАНИЕ ===================== -->
   <div class="toolbar" id="tb-review" style="display:none">
-    <div class="group">
-      <button id="btn-spell">🔍 Проверка орфографии</button>
+    <div class="group"><div class="group-title">Правописание</div>
+      <button data-act="spell">🔍 Орфография</button>
+      <button data-act="thesaurus">📖 Тезаурус</button>
+      <button data-act="wordcount">📊 Статистика</button>
     </div>
-    <div class="group">
-      <button id="btn-wordcount">📊 Статистика</button>
+    <div class="group"><div class="group-title">Комментарии</div>
+      <button data-act="new-comment">➕ Комментарий</button>
+      <button data-act="delete-comment">🗑 Удалить</button>
+      <button data-act="next-comment">→ Следующий</button>
+    </div>
+    <div class="group"><div class="group-title">Отслеживание</div>
+      <button data-act="track-changes">↺ Отслеживать</button>
+      <button data-act="accept">✔ Принять</button>
+      <button data-act="reject">✘ Отклонить</button>
+    </div>
+    <div class="group"><div class="group-title">Сравнение</div>
+      <button data-act="compare">Сравнить</button>
+      <button data-act="protect">🔒 Защитить</button>
     </div>
   </div>
 
-  <!-- ВИД -->
+  <!-- ===================== ВИД ===================== -->
   <div class="toolbar" id="tb-view" style="display:none">
-    <div class="group">
-      <button id="btn-zoom-in">🔍+</button>
-      <button id="btn-zoom-out">🔍−</button>
-      <span id="zoom-label">100%</span>
+    <div class="group"><div class="group-title">Режимы</div>
+      <button data-act="view-read">📖 Чтение</button>
+      <button data-act="view-print">🖨 Печать</button>
+      <button data-act="view-web">🌐 Веб</button>
     </div>
-    <div class="group">
-      <button id="btn-fullscreen">⛶ Во весь экран</button>
+    <div class="group"><div class="group-title">Масштаб</div>
+      <button data-act="zoom-out">🔍−</button>
+      <span id="zoom-label">100%</span>
+      <button data-act="zoom-in">🔍+</button>
+      <button data-act="zoom-100">100%</button>
+    </div>
+    <div class="group"><div class="group-title">Окно</div>
+      <button data-act="new-window">🪟 Новое окно</button>
+      <button data-act="split">⊟ Разделить</button>
+      <button data-act="fullscreen">⛶ Во весь экран</button>
+    </div>
+    <div class="group"><div class="group-title">Показать</div>
+      <button data-act="ruler">📏 Линейка</button>
+      <button data-act="gridlines">▦ Сетка</button>
+      <button data-act="nav-pane">🧭 Навигация</button>
+    </div>
+  </div>
+
+  <!-- ===================== СПРАВКА ===================== -->
+  <div class="toolbar" id="tb-help" style="display:none">
+    <div class="group"><div class="group-title">Справка</div>
+      <button data-act="hotkeys">⌨ Горячие клавиши</button>
+      <button data-act="about">ℹ О программе</button>
+      <button data-act="feedback">✉ Обратная связь</button>
     </div>
   </div>
 </div>
@@ -205,9 +347,7 @@
 <!-- Рабочая область -->
 <div class="workspace">
   <div class="page" id="page">
-    <div id="editor" contenteditable="true" spellcheck="true">
-      <p>Здравствуй, мама! Начни печатать здесь...</p>
-    </div>
+    <div id="editor" contenteditable="true" spellcheck="true"></div>
   </div>
 </div>
 
@@ -215,12 +355,13 @@
 <div class="statusbar">
   <span id="stat-words">Слов: 0</span>
   <span id="stat-chars">Символов: 0</span>
-  <span id="stat-page">Стр. 1</span>
+  <span id="stat-pages">Стр.: 1</span>
+  <span id="stat-lang">Русский</span>
+  <span id="stat-zoom">Масштаб: 100%</span>
 </div>
 
 <input type="file" id="file-input" accept=".txt,.html,.htm,.docx" style="display:none">
 <input type="file" id="image-input" accept="image/*" style="display:none">
-
 <script src="script.js"></script>
 </body>
 </html>
