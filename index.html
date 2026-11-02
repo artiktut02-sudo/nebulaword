@@ -2,25 +2,42 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title>Редактор документов</title>
+<title>Документ1 — Word</title>
 <link rel="stylesheet" href="style.css">
 <script src="https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html-docx-js@0.3.1/dist/html-docx.js"></script>
 </head>
 <body>
 
-<!-- Шапка -->
+<!-- ====== ВЕРХНЯЯ ПАНЕЛЬ (Заголовок окна) ====== -->
 <div class="titlebar">
-  <div class="quick-access">
-    <button title="Сохранить" id="qa-save">💾</button>
-    <button title="Отменить" id="qa-undo">↶</button>
-    <button title="Повторить" id="qa-redo">↷</button>
-    <button title="Печать" id="qa-print">🖨</button>
+  <div class="tb-left">
+    <span class="word-logo">📝</span>
+    <div class="autosave">
+      <span class="dot"></span> Автосохранение
+    </div>
+    <span class="doc-name" id="docName">Документ1</span>
+    <span class="saved-state">— Сохранено</span>
   </div>
-  <div class="doc-title" id="docName">Документ1 — Редактор</div>
+  <div class="tb-right">
+    <button title="Поиск" data-act="find">🔍</button>
+    <button title="Свернуть" onclick="alert('Свернуть окно')">—</button>
+    <button title="Развернуть" onclick="alert('Развернуть окно')">▢</button>
+    <button title="Закрыть" onclick="alert('Закрыть окно')">✕</button>
+  </div>
 </div>
 
-<!-- Вкладки -->
+<!-- ====== БЫСТРЫЙ ДОСТУП ====== -->
+<div class="quick-bar">
+  <button data-act="save-html" title="Сохранить">💾</button>
+  <button data-act="open" title="Открыть">📂</button>
+  <button data-cmd="undo" title="Отменить">↶</button>
+  <button data-cmd="redo" title="Повторить">↷</button>
+  <button title="Печать" data-act="print">🖨</button>
+  <button title="Настройки">⚙</button>
+</div>
+
+<!-- ====== ВКЛАДКИ ====== -->
 <div class="ribbon">
   <div class="tab-bar">
     <button class="tab" data-tab="file">Файл</button>
@@ -33,331 +50,702 @@
     <button class="tab" data-tab="review">Рецензирование</button>
     <button class="tab" data-tab="view">Вид</button>
     <button class="tab" data-tab="help">Справка</button>
+    <button class="tab-help" title="Что нового?">💬</button>
   </div>
 
   <!-- ===================== ФАЙЛ ===================== -->
-  <div class="toolbar" id="tb-file" style="display:none">
-    <div class="group"><div class="group-title">Создать</div>
-      <button data-act="new">📄 Новый</button>
-      <button data-act="template">📋 С шаблона</button>
+  <div class="panel" id="tb-file" style="display:none">
+    <div class="menu-vertical">
+      <div class="menu-item" data-act="new"><b>Создать</b><span>Новый документ</span></div>
+      <div class="menu-item" data-act="open"><b>Открыть</b><span>С компьютера</span></div>
+      <div class="menu-item" data-act="doc-info"><b>Сведения</b><span>О документе</span></div>
+      <div class="menu-item" data-act="print"><b>Печать</b><span>Ctrl+P</span></div>
+      <div class="menu-item" data-act="share"><b>Поделиться</b><span>Отправить</span></div>
+      <div class="menu-item" data-act="save-html"><b>Сохранить копию</b><span>На компьютер</span></div>
+      <div class="menu-item" data-act="save-docx"><b>Экспорт</b><span>В DOCX</span></div>
+      <div class="menu-item" data-act="save-txt"><b>Экспорт</b><span>В TXT</span></div>
+      <div class="menu-item" data-act="save-pdf"><b>Экспорт</b><span>В PDF (Ctrl+P)</span></div>
+      <div class="menu-item" data-act="export-json"><b>Экспорт</b><span>В JSON</span></div>
+      <div class="menu-item" data-act="template"><b>Создать из шаблона</b><span>Готовые варианты</span></div>
+      <div class="menu-item" data-act="close"><b>Закрыть</b><span>Документ</span></div>
+      <div class="menu-item"><b>Учётная запись</b><span>Настройки</span></div>
+      <div class="menu-item"><b>Параметры</b><span>Настройки Word</span></div>
     </div>
-    <div class="group"><div class="group-title">Открыть</div>
-      <button data-act="open">📂 Открыть (.txt/.html/.docx)</button>
-      <button data-act="open-recent">🕘 Последние</button>
-    </div>
-    <div class="group"><div class="group-title">Сохранить</div>
-      <button data-act="save-html">💾 HTML</button>
-      <button data-act="save-docx">📝 DOCX</button>
-      <button data-act="save-txt">📃 TXT</button>
-      <button data-act="save-pdf">📕 PDF</button>
-    </div>
-    <div class="group"><div class="group-title">Печать</div>
-      <button data-act="print">🖨 Печать</button>
-      <button data-act="print-preview">👁 Предпросмотр</button>
-    </div>
-    <div class="group"><div class="group-title">Экспорт</div>
-      <button data-act="export-json">JSON</button>
-      <button data-act="share">📤 Поделиться</button>
-    </div>
-    <div class="group"><div class="group-title">Информация</div>
-      <button data-act="doc-info">ℹ Свойства</button>
-      <button data-act="doc-protect">🔒 Защита</button>
+    <div class="recent-info">
+      <h2>Сведения о документе</h2>
+      <p><b>Имя:</b> <span id="info-name">Документ1</span></p>
+      <p><b>Расположение:</b> локально (браузер)</p>
+      <p><b>Размер:</b> <span id="info-size">—</span></p>
+      <p><b>Страниц:</b> <span id="info-pages">1</span></p>
+      <p><b>Слов:</b> <span id="info-words">0</span></p>
+      <p><b>Символов:</b> <span id="info-chars">0</span></p>
+      <p><b>Автор:</b> Мама</p>
+      <p><b>Дата:</b> <span id="info-date">—</span></p>
     </div>
   </div>
 
   <!-- ===================== ГЛАВНАЯ ===================== -->
-  <div class="toolbar" id="tb-home">
-    <div class="group"><div class="group-title">Буфер</div>
-      <button data-cmd="paste">📥 Вставить</button>
-      <button data-cmd="cut">✂️</button>
-      <button data-cmd="copy">📑</button>
-      <button data-act="format-painter">🖌 Формат</button>
+  <div class="panel" id="tb-home">
+
+    <div class="grp">
+      <div class="grp-title">Буфер обмена</div>
+      <div class="grp-body">
+        <button class="big" data-cmd="paste">📋<br>Вставить</button>
+        <div class="mini-col">
+          <button data-cmd="cut" title="Вырезать">✂</button>
+          <button data-cmd="copy" title="Копировать">📑</button>
+          <button data-act="format-painter" title="Формат по образцу">🖌</button>
+        </div>
+      </div>
     </div>
-    <div class="group"><div class="group-title">Шрифт</div>
-      <select id="font-family">
-        <option>Times New Roman</option><option>Arial</option><option>Calibri</option>
-        <option>Courier New</option><option>Georgia</option><option>Verdana</option>
-        <option>Tahoma</option><option>Segoe UI</option><option>Impact</option>
-        <option>Comic Sans MS</option><option>Consolas</option>
-      </select>
-      <select id="font-size">
-        <option>8</option><option>9</option><option>10</option><option>11</option>
-        <option>12</option><option>13</option><option selected>14</option>
-        <option>16</option><option>18</option><option>20</option><option>22</option>
-        <option>24</option><option>26</option><option>28</option><option>32</option>
-        <option>36</option><option>48</option><option>72</option>
-      </select>
-      <button data-act="grow-font">A+</button>
-      <button data-act="shrink-font">A−</button>
-      <button data-act="clear-format">🧹 Очистить</button>
+
+    <div class="grp">
+      <div class="grp-title">Шрифт</div>
+      <div class="grp-body column">
+        <div class="row">
+          <select id="font-family" class="sel-font">
+            <option>Times New Roman</option><option>Arial</option><option>Calibri</option>
+            <option>Courier New</option><option>Georgia</option><option>Verdana</option>
+            <option>Tahoma</option><option>Segoe UI</option><option>Impact</option>
+            <option>Comic Sans MS</option><option>Consolas</option><option>Cambria</option>
+          </select>
+          <select id="font-size">
+            <option>8</option><option>9</option><option>10</option><option>11</option>
+            <option>12</option><option>13</option><option selected>14</option>
+            <option>16</option><option>18</option><option>20</option><option>22</option>
+            <option>24</option><option>26</option><option>28</option><option>32</option>
+            <option>36</option><option>48</option><option>72</option>
+          </select>
+          <button data-act="grow-font">A⁺</button>
+          <button data-act="shrink-font">A⁻</button>
+          <button data-act="clear-format">🧹</button>
+        </div>
+        <div class="row">
+          <button data-cmd="bold"><b>Ж</b></button>
+          <button data-cmd="italic"><i>К</i></button>
+          <button data-cmd="underline"><u>Ч</u></button>
+          <button data-cmd="strikeThrough"><s>З</s></button>
+          <button data-cmd="subscript">X₂</button>
+          <button data-cmd="superscript">X²</button>
+          <button data-act="text-effects">A✨</button>
+          <button data-act="highlight">🖍</button>
+          <input type="color" id="text-color" value="#000000">
+          <input type="color" id="highlight-color" value="#ffff00">
+        </div>
+        <div class="row">
+          <button data-act="change-case">Aa</button>
+          <button data-act="small-caps">ᴀᴀ</button>
+          <button data-act="all-caps">AA</button>
+        </div>
+      </div>
     </div>
-    <div class="group"><div class="group-title">Начертание</div>
-      <button data-cmd="bold"><b>Ж</b></button>
-      <button data-cmd="italic"><i>К</i></button>
-      <button data-cmd="underline"><u>Ч</u></button>
-      <button data-cmd="strikeThrough"><s>З</s></button>
-      <button data-cmd="subscript">X₂</button>
-      <button data-cmd="superscript">X²</button>
+
+    <div class="grp">
+      <div class="grp-title">Абзац</div>
+      <div class="grp-body column">
+        <div class="row">
+          <button data-cmd="insertUnorderedList">•</button>
+          <button data-cmd="insertOrderedList">1.</button>
+          <button data-act="multilevel-list">1.1.</button>
+          <button data-act="checklist">☑</button>
+        </div>
+        <div class="row">
+          <button data-cmd="outdent">⇤</button>
+          <button data-cmd="indent">⇥</button>
+        </div>
+        <div class="row">
+          <button data-cmd="justifyLeft">⯇</button>
+          <button data-cmd="justifyCenter">≡</button>
+          <button data-cmd="justifyRight">⯈</button>
+          <button data-cmd="justifyFull">≡≡</button>
+        </div>
+        <div class="row">
+          <button data-act="line-spacing">↕</button>
+          <button data-act="para-shading">🎨</button>
+          <button data-act="borders">▭</button>
+        </div>
+      </div>
     </div>
-    <div class="group"><div class="group-title">Цвет</div>
-      <input type="color" id="text-color" value="#000000" title="Цвет текста">
-      <input type="color" id="highlight-color" value="#ffff00" title="Выделение">
+
+    <div class="grp">
+      <div class="grp-title">Стили</div>
+      <div class="grp-body column">
+        <select id="style-select">
+          <option value="p">Обычный</option>
+          <option value="h1">Заголовок 1</option>
+          <option value="h2">Заголовок 2</option>
+          <option value="h3">Заголовок 3</option>
+          <option value="blockquote">Цитата</option>
+          <option value="pre">Код</option>
+          <option value="p" data-style="title">Название</option>
+          <option value="p" data-style="subtitle">Подзаголовок</option>
+        </select>
+        <select id="style-preset">
+          <option>Обычный</option>
+          <option>Строгий</option>
+          <option>Современный</option>
+          <option>Классический</option>
+        </select>
+      </div>
     </div>
-    <div class="group"><div class="group-title">Абзац</div>
-      <button data-cmd="insertUnorderedList">• •</button>
-      <button data-cmd="insertOrderedList">1.</button>
-      <button data-act="checklist">☑ Чек-лист</button>
-      <button data-cmd="outdent">← Отступ</button>
-      <button data-cmd="indent">→ Отступ</button>
+
+    <div class="grp">
+      <div class="grp-title">Редактирование</div>
+      <div class="grp-body column">
+        <div class="row">
+          <button data-act="find">🔍 Найти</button>
+          <button data-act="replace">🔁 Заменить</button>
+        </div>
+        <div class="row">
+          <button data-act="select-all">Выделить всё</button>
+          <button data-act="select-object">Выделить ▼</button>
+        </div>
+      </div>
     </div>
-    <div class="group"><div class="group-title">Выравнивание</div>
-      <button data-cmd="justifyLeft">⯇</button>
-      <button data-cmd="justifyCenter">≡</button>
-      <button data-cmd="justifyRight">⯈</button>
-      <button data-cmd="justifyFull">≡≡</button>
-    </div>
-    <div class="group"><div class="group-title">Стили</div>
-      <select id="style-select">
-        <option value="p">Обычный</option>
-        <option value="h1">Заголовок 1</option>
-        <option value="h2">Заголовок 2</option>
-        <option value="h3">Заголовок 3</option>
-        <option value="blockquote">Цитата</option>
-        <option value="pre">Код</option>
-      </select>
-    </div>
-    <div class="group"><div class="group-title">Редактирование</div>
-      <button data-act="find">🔍 Найти</button>
-      <button data-act="replace">🔁 Заменить</button>
-      <button data-act="select-all">Выделить всё</button>
-    </div>
+
   </div>
 
   <!-- ===================== ВСТАВКА ===================== -->
-  <div class="toolbar" id="tb-insert" style="display:none">
-    <div class="group"><div class="group-title">Страницы</div>
-      <button data-act="page-break">⤓ Разрыв страницы</button>
-      <button data-act="cover">📄 Титульная</button>
-      <button data-act="blank-page">📃 Пустая</button>
+  <div class="panel" id="tb-insert" style="display:none">
+
+    <div class="grp">
+      <div class="grp-title">Страницы</div>
+      <div class="grp-body">
+        <button class="big" data-act="cover">📄<br>Титульная</button>
+        <div class="mini-col">
+          <button data-act="blank-page">📃</button>
+          <button data-act="page-break">⤓</button>
+        </div>
+      </div>
     </div>
-    <div class="group"><div class="group-title">Таблица</div>
-      <button data-act="table">▦ Таблица</button>
-      <button data-act="table-draw">✏ Нарисовать</button>
-      <button data-act="table-convert">Преобразовать</button>
+
+    <div class="grp">
+      <div class="grp-title">Таблицы</div>
+      <div class="grp-body">
+        <button class="big" data-act="table">▦<br>Таблица</button>
+        <div class="mini-col">
+          <button data-act="table-draw">✏</button>
+          <button data-act="table-convert">↔</button>
+          <button data-act="excel-table">XLS</button>
+        </div>
+      </div>
     </div>
-    <div class="group"><div class="group-title">Иллюстрации</div>
-      <button data-act="image">🖼 Картинка</button>
-      <button data-act="shapes">◼ Фигуры</button>
-      <button data-act="chart">📊 Диаграмма</button>
-      <button data-act="icons">😀 Значки</button>
-      <button data-act="smartart">📐 SmartArt</button>
+
+    <div class="grp">
+      <div class="grp-title">Иллюстрации</div>
+      <div class="grp-body">
+        <button class="big" data-act="image">🖼<br>Картинка</button>
+        <div class="mini-col">
+          <button data-act="shapes">◼</button>
+          <button data-act="icons">😀</button>
+          <button data-act="3d-model">🧊</button>
+          <button data-act="smartart">📐</button>
+          <button data-act="chart">📊</button>
+          <button data-act="screenshot">📷</button>
+        </div>
+      </div>
     </div>
-    <div class="group"><div class="group-title">Ссылки</div>
-      <button data-act="link">🔗 Ссылка</button>
-      <button data-act="bookmark">🔖 Закладка</button>
-      <button data-act="cross-ref">↔ Перекрёстная</button>
+
+    <div class="grp">
+      <div class="grp-title">Ссылки</div>
+      <div class="grp-body">
+        <button class="big" data-act="link">🔗<br>Ссылка</button>
+        <div class="mini-col">
+          <button data-act="bookmark">🔖</button>
+          <button data-act="cross-ref">↔</button>
+        </div>
+      </div>
     </div>
-    <div class="group"><div class="group-title">Колонтитулы</div>
-      <button data-act="header">↑ Верхний</button>
-      <button data-act="footer">↓ Нижний</button>
-      <button data-act="page-num">№ Номер</button>
+
+    <div class="grp">
+      <div class="grp-title">Колонтитулы</div>
+      <div class="grp-body">
+        <button class="big" data-act="header">↑<br>Верхний</button>
+        <div class="mini-col">
+          <button data-act="footer">↓</button>
+          <button data-act="page-num">№</button>
+          <button data-act="header-date">📅</button>
+        </div>
+      </div>
     </div>
-    <div class="group"><div class="group-title">Текст</div>
-      <button data-act="textbox">📝 Надпись</button>
-      <button data-act="date">📅 Дата</button>
-      <button data-act="time">⏰ Время</button>
-      <button data-act="symbol">Ω Символ</button>
-      <button data-act="emoji">😊 Эмодзи</button>
+
+    <div class="grp">
+      <div class="grp-title">Текст</div>
+      <div class="grp-body">
+        <button class="big" data-act="textbox">📝<br>Надпись</button>
+        <div class="mini-col">
+          <button data-act="date">📅</button>
+          <button data-act="time">⏰</button>
+          <button data-act="symbol">Ω</button>
+          <button data-act="emoji">😊</button>
+          <button data-act="object">📦</button>
+        </div>
+      </div>
     </div>
-    <div class="group"><div class="group-title">Медиа</div>
-      <button data-act="video">🎬 Видео</button>
-      <button data-act="audio">🎵 Аудио</button>
-      <button data-act="qr">🔲 QR-код</button>
+
+    <div class="grp">
+      <div class="grp-title">Мультимедиа</div>
+      <div class="grp-body">
+        <button class="big" data-act="video">🎬<br>Видео</button>
+        <div class="mini-col">
+          <button data-act="audio">🎵</button>
+          <button data-act="qr">🔲</button>
+          <button data-act="record">🎤</button>
+        </div>
+      </div>
     </div>
+
   </div>
 
   <!-- ===================== ДИЗАЙН ===================== -->
-  <div class="toolbar" id="tb-design" style="display:none">
-    <div class="group"><div class="group-title">Темы</div>
-      <select id="theme-select">
-        <option value="default">Стандартная</option>
-        <option value="cream">Кремовая</option>
-        <option value="lightblue">Голубая</option>
-        <option value="dark">Тёмная</option>
-        <option value="sepia">Сепия</option>
-      </select>
+  <div class="panel" id="tb-design" style="display:none">
+
+    <div class="grp">
+      <div class="grp-title">Темы</div>
+      <div class="grp-body">
+        <select id="theme-select" class="sel-theme">
+          <option value="default">Стандартная</option>
+          <option value="cream">Кремовая</option>
+          <option value="lightblue">Голубая</option>
+          <option value="dark">Тёмная</option>
+          <option value="sepia">Сепия</option>
+        </select>
+        <div class="mini-col">
+          <button data-act="theme-save">💾</button>
+          <button data-act="theme-reset">↻</button>
+        </div>
+      </div>
     </div>
-    <div class="group"><div class="group-title">Цвета</div>
-      <button data-act="font-color-default">Цвет текста</button>
-      <button data-act="bg-color-default">Цвет фона</button>
+
+    <div class="grp">
+      <div class="grp-title">Цвета</div>
+      <div class="grp-body">
+        <button class="big" data-act="font-color-default">A<br>Цвет</button>
+        <div class="mini-col">
+          <button data-act="bg-color-default">🎨</button>
+          <button data-act="accent-color">◆</button>
+        </div>
+      </div>
     </div>
-    <div class="group"><div class="group-title">Оформление</div>
-      <button data-act="watermark">💧 Водяной знак</button>
-      <button data-act="page-color">🎨 Цвет страницы</button>
-      <button data-act="page-border">🖼 Границы</button>
+
+    <div class="grp">
+      <div class="grp-title">Оформление документа</div>
+      <div class="grp-body column">
+        <div class="row">
+          <button data-act="watermark">💧 Водяной</button>
+          <button data-act="page-color">🎨 Фон</button>
+        </div>
+        <div class="row">
+          <button data-act="page-border">🖼 Границы</button>
+          <button data-act="page-effects">✨ Эффекты</button>
+        </div>
+      </div>
     </div>
-    <div class="group"><div class="group-title">Стили</div>
-      <button data-act="style-normal">Обычный</button>
-      <button data-act="style-heading">Заголовок</button>
-      <button data-act="style-quote">Цитата</button>
+
+    <div class="grp">
+      <div class="grp-title">Стили документа</div>
+      <div class="grp-body column">
+        <div class="row">
+          <button data-act="style-normal">Обычный</button>
+          <button data-act="style-heading">Заголовок</button>
+        </div>
+        <div class="row">
+          <button data-act="style-quote">Цитата</button>
+          <button data-act="style-strong">Акцент</button>
+        </div>
+      </div>
     </div>
+
   </div>
 
   <!-- ===================== МАКЕТ ===================== -->
-  <div class="toolbar" id="tb-layout" style="display:none">
-    <div class="group"><div class="group-title">Поля</div>
-      <select id="margins">
-        <option value="60px 70px">Обычные</option>
-        <option value="30px 30px">Узкие</option>
-        <option value="90px 120px">Широкие</option>
-        <option value="0px 0px">Без полей</option>
-      </select>
+  <div class="panel" id="tb-layout" style="display:none">
+
+    <div class="grp">
+      <div class="grp-title">Параметры страницы</div>
+      <div class="grp-body column">
+        <div class="row">
+          <select id="margins">
+            <option value="60px 70px">Обычные поля</option>
+            <option value="30px 30px">Узкие</option>
+            <option value="90px 120px">Широкие</option>
+            <option value="0px 0px">Без полей</option>
+          </select>
+        </div>
+        <div class="row">
+          <select id="orientation">
+            <option value="portrait">Книжная</option>
+            <option value="landscape">Альбомная</option>
+          </select>
+          <select id="page-size">
+            <option value="A4">A4</option>
+            <option value="A5">A5</option>
+            <option value="Letter">Letter</option>
+            <option value="Legal">Legal</option>
+          </select>
+        </div>
+      </div>
     </div>
-    <div class="group"><div class="group-title">Ориентация</div>
-      <select id="orientation">
-        <option value="portrait">Книжная</option>
-        <option value="landscape">Альбомная</option>
-      </select>
+
+    <div class="grp">
+      <div class="grp-title">Абзац</div>
+      <div class="grp-body column">
+        <div class="row">
+          <button data-act="space-before">↑ Абзац</button>
+          <button data-act="space-after">↓ Абзац</button>
+        </div>
+        <div class="row">
+          <select id="line-height">
+            <option value="1">1.0</option><option value="1.15">1.15</option>
+            <option value="1.5" selected>1.5</option><option value="2">2.0</option>
+            <option value="2.5">2.5</option>
+          </select>
+        </div>
+      </div>
     </div>
-    <div class="group"><div class="group-title">Размер</div>
-      <select id="page-size">
-        <option value="A4">A4</option>
-        <option value="A5">A5</option>
-        <option value="Letter">Letter</option>
-        <option value="Legal">Legal</option>
-      </select>
+
+    <div class="grp">
+      <div class="grp-title">Колонки</div>
+      <div class="grp-body column">
+        <div class="row">
+          <button data-act="cols-1">1</button>
+          <button data-act="cols-2">2</button>
+          <button data-act="cols-3">3</button>
+        </div>
+      </div>
     </div>
-    <div class="group"><div class="group-title">Интервал</div>
-      <select id="line-height">
-        <option value="1">1.0</option><option value="1.15">1.15</option>
-        <option value="1.5" selected>1.5</option><option value="2">2.0</option>
-        <option value="2.5">2.5</option>
-      </select>
-      <button data-act="space-before">Абзац ↑</button>
-      <button data-act="space-after">Абзац ↓</button>
+
+    <div class="grp">
+      <div class="grp-title">Расположение</div>
+      <div class="grp-body">
+        <button class="big" data-act="rotate">↻<br>Повернуть</button>
+        <div class="mini-col">
+          <button data-act="align-object">▶</button>
+          <button data-act="wrap-text">↩</button>
+          <button data-act="align-to-page">▦</button>
+          <button data-act="align-to-margin">▭</button>
+        </div>
+      </div>
     </div>
-    <div class="group"><div class="group-title">Колонки</div>
-      <button data-act="cols-1">1 колонка</button>
-      <button data-act="cols-2">2 колонки</button>
-      <button data-act="cols-3">3 колонки</button>
+
+    <div class="grp">
+      <div class="grp-title">Размеры</div>
+      <div class="grp-body">
+        <button class="big" data-act="page-setup">📐<br>Параметры</button>
+      </div>
     </div>
-    <div class="group"><div class="group-title">Расположение</div>
-      <button data-act="rotate">↻ Повернуть</button>
-      <button data-act="align-object">Выровнять</button>
-      <button data-act="wrap-text">Обтекание</button>
-    </div>
+
   </div>
 
   <!-- ===================== ССЫЛКИ ===================== -->
-  <div class="toolbar" id="tb-references" style="display:none">
-    <div class="group"><div class="group-title">Оглавление</div>
-      <button data-act="toc">📑 Вставить</button>
-      <button data-act="toc-update">↻ Обновить</button>
+  <div class="panel" id="tb-references" style="display:none">
+
+    <div class="grp">
+      <div class="grp-title">Оглавление</div>
+      <div class="grp-body">
+        <button class="big" data-act="toc">📑<br>Оглавление</button>
+        <div class="mini-col">
+          <button data-act="toc-update">↻</button>
+          <button data-act="toc-settings">⚙</button>
+          <button data-act="toc-remove">✕</button>
+        </div>
+      </div>
     </div>
-    <div class="group"><div class="group-title">Сноски</div>
-      <button data-act="footnote">Сноска</button>
-      <button data-act="endnote">Концевая</button>
-      <button data-act="next-footnote">→ След.</button>
+
+    <div class="grp">
+      <div class="grp-title">Сноски</div>
+      <div class="grp-body">
+        <button class="big" data-act="footnote">¹<sup>Сноска</sup></button>
+        <div class="mini-col">
+          <button data-act="endnote">²</button>
+          <button data-act="next-footnote">→</button>
+          <button data-act="prev-footnote">←</button>
+        </div>
+      </div>
     </div>
-    <div class="group"><div class="group-title">Цитирование</div>
-      <button data-act="citation">Вставить</button>
-      <button data-act="bibliography">Библиография</button>
+
+    <div class="grp">
+      <div class="grp-title">Цитирование и библиография</div>
+      <div class="grp-body column">
+        <div class="row">
+          <button data-act="citation">Вставить цитату</button>
+        </div>
+        <div class="row">
+          <button data-act="bibliography">Библиография</button>
+          <button data-act="manage-sources">Источники</button>
+        </div>
+      </div>
     </div>
-    <div class="group"><div class="group-title">Предметный указатель</div>
-      <button data-act="mark-entry">Отметить</button>
-      <button data-act="insert-index">Вставить</button>
+
+    <div class="grp">
+      <div class="grp-title">Предметный указатель</div>
+      <div class="grp-body column">
+        <div class="row">
+          <button data-act="mark-entry">Отметить</button>
+          <button data-act="insert-index">Вставить</button>
+        </div>
+        <div class="row">
+          <button data-act="update-index">Обновить</button>
+        </div>
+      </div>
     </div>
+
+    <div class="grp">
+      <div class="grp-title">Таблица ссылок</div>
+      <div class="grp-body column">
+        <div class="row">
+          <button data-act="insert-table-fig">Таблицы</button>
+          <button data-act="insert-table-cite">Ссылки</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <!-- ===================== РАССЫЛКИ ===================== -->
-  <div class="toolbar" id="tb-mailings" style="display:none">
-    <div class="group"><div class="group-title">Создать</div>
-      <button data-act="envelopes">✉ Конверты</button>
-      <button data-act="labels">🏷 Наклейки</button>
+  <div class="panel" id="tb-mailings" style="display:none">
+
+    <div class="grp">
+      <div class="grp-title">Создать</div>
+      <div class="grp-body">
+        <button class="big" data-act="envelopes">✉<br>Конверты</button>
+        <div class="mini-col">
+          <button data-act="labels">🏷</button>
+        </div>
+      </div>
     </div>
-    <div class="group"><div class="group-title">Слияние</div>
-      <button data-act="mail-merge">Слияние</button>
-      <button data-act="select-recipients">Получатели</button>
-      <button data-act="preview-results">Предпросмотр</button>
+
+    <div class="grp">
+      <div class="grp-title">Начать слияние</div>
+      <div class="grp-body column">
+        <div class="row">
+          <button data-act="mail-merge">Слияние</button>
+          <button data-act="select-recipients">Получатели</button>
+        </div>
+        <div class="row">
+          <button data-act="edit-list">Изменить список</button>
+        </div>
+      </div>
     </div>
-    <div class="group"><div class="group-title">Поля</div>
-      <button data-act="greeting">Приветствие</button>
-      <button data-act="merge-field">Поле</button>
+
+    <div class="grp">
+      <div class="grp-title">Поля для слияния</div>
+      <div class="grp-body column">
+        <div class="row">
+          <button data-act="greeting">Приветствие</button>
+          <button data-act="merge-field">Поле</button>
+        </div>
+        <div class="row">
+          <button data-act="rules">Правила</button>
+          <button data-act="match-fields">Сопоставить</button>
+        </div>
+      </div>
     </div>
+
+    <div class="grp">
+      <div class="grp-title">Результаты</div>
+      <div class="grp-body column">
+        <div class="row">
+          <button data-act="preview-results">Предпросмотр</button>
+        </div>
+        <div class="row">
+          <button data-act="finish-merge">Завершить</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <!-- ===================== РЕЦЕНЗИРОВАНИЕ ===================== -->
-  <div class="toolbar" id="tb-review" style="display:none">
-    <div class="group"><div class="group-title">Правописание</div>
-      <button data-act="spell">🔍 Орфография</button>
-      <button data-act="thesaurus">📖 Тезаурус</button>
-      <button data-act="wordcount">📊 Статистика</button>
+  <div class="panel" id="tb-review" style="display:none">
+
+    <div class="grp">
+      <div class="grp-title">Правописание</div>
+      <div class="grp-body">
+        <button class="big" data-act="spell">🔍<br>Орфография</button>
+        <div class="mini-col">
+          <button data-act="thesaurus">📖</button>
+          <button data-act="wordcount">📊</button>
+          <button data-act="read-aloud">🔊</button>
+        </div>
+      </div>
     </div>
-    <div class="group"><div class="group-title">Комментарии</div>
-      <button data-act="new-comment">➕ Комментарий</button>
-      <button data-act="delete-comment">🗑 Удалить</button>
-      <button data-act="next-comment">→ Следующий</button>
+
+    <div class="grp">
+      <div class="grp-title">Комментарии</div>
+      <div class="grp-body">
+        <button class="big" data-act="new-comment">➕<br>Комментарий</button>
+        <div class="mini-col">
+          <button data-act="delete-comment">🗑</button>
+          <button data-act="prev-comment">←</button>
+          <button data-act="next-comment">→</button>
+        </div>
+      </div>
     </div>
-    <div class="group"><div class="group-title">Отслеживание</div>
-      <button data-act="track-changes">↺ Отслеживать</button>
-      <button data-act="accept">✔ Принять</button>
-      <button data-act="reject">✘ Отклонить</button>
+
+    <div class="grp">
+      <div class="grp-title">Отслеживание</div>
+      <div class="grp-body column">
+        <div class="row">
+          <button data-act="track-changes">↺ Отслеживать</button>
+        </div>
+        <div class="row">
+          <button data-act="accept">✔ Принять</button>
+          <button data-act="reject">✘ Отклонить</button>
+        </div>
+      </div>
     </div>
-    <div class="group"><div class="group-title">Сравнение</div>
-      <button data-act="compare">Сравнить</button>
-      <button data-act="protect">🔒 Защитить</button>
+
+    <div class="grp">
+      <div class="grp-title">Изменения</div>
+      <div class="grp-body column">
+        <div class="row">
+          <button data-act="next-change">→ Следующее</button>
+          <button data-act="prev-change">← Предыдущее</button>
+        </div>
+      </div>
     </div>
+
+    <div class="grp">
+      <div class="grp-title">Сравнить</div>
+      <div class="grp-body column">
+        <div class="row">
+          <button data-act="compare">Сравнить</button>
+          <button data-act="combine">Объединить</button>
+        </div>
+        <div class="row">
+          <button data-act="protect">🔒 Защитить</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <!-- ===================== ВИД ===================== -->
-  <div class="toolbar" id="tb-view" style="display:none">
-    <div class="group"><div class="group-title">Режимы</div>
-      <button data-act="view-read">📖 Чтение</button>
-      <button data-act="view-print">🖨 Печать</button>
-      <button data-act="view-web">🌐 Веб</button>
+  <div class="panel" id="tb-view" style="display:none">
+
+    <div class="grp">
+      <div class="grp-title">Режимы просмотра</div>
+      <div class="grp-body">
+        <button class="big" data-act="view-read">📖<br>Чтение</button>
+        <div class="mini-col">
+          <button data-act="view-print">🖨</button>
+          <button data-act="view-web">🌐</button>
+          <button data-act="view-draft">📄</button>
+          <button data-act="view-outline">🧭</button>
+        </div>
+      </div>
     </div>
-    <div class="group"><div class="group-title">Масштаб</div>
-      <button data-act="zoom-out">🔍−</button>
-      <span id="zoom-label">100%</span>
-      <button data-act="zoom-in">🔍+</button>
-      <button data-act="zoom-100">100%</button>
+
+    <div class="grp">
+      <div class="grp-title">Масштаб</div>
+      <div class="grp-body column">
+        <div class="row">
+          <button data-act="zoom-out">🔍−</button>
+          <span id="zoom-label">100%</span>
+          <button data-act="zoom-in">🔍+</button>
+        </div>
+        <div class="row">
+          <button data-act="zoom-100">100%</button>
+          <button data-act="zoom-page">Страница</button>
+          <button data-act="zoom-width">Ширина</button>
+        </div>
+      </div>
     </div>
-    <div class="group"><div class="group-title">Окно</div>
-      <button data-act="new-window">🪟 Новое окно</button>
-      <button data-act="split">⊟ Разделить</button>
-      <button data-act="fullscreen">⛶ Во весь экран</button>
+
+    <div class="grp">
+      <div class="grp-title">Окно</div>
+      <div class="grp-body column">
+        <div class="row">
+          <button data-act="new-window">🪟 Новое</button>
+          <button data-act="split">⊟ Разделить</button>
+        </div>
+        <div class="row">
+          <button data-act="fullscreen">⛶ Во весь экран</button>
+        </div>
+      </div>
     </div>
-    <div class="group"><div class="group-title">Показать</div>
-      <button data-act="ruler">📏 Линейка</button>
-      <button data-act="gridlines">▦ Сетка</button>
-      <button data-act="nav-pane">🧭 Навигация</button>
+
+    <div class="grp">
+      <div class="grp-title">Показать</div>
+      <div class="grp-body column">
+        <div class="row">
+          <button data-act="ruler">📏 Линейка</button>
+          <button data-act="gridlines">▦ Сетка</button>
+        </div>
+        <div class="row">
+          <button data-act="nav-pane">🧭 Навигация</button>
+          <button data-act="comments-pane">💬 Комментарии</button>
+        </div>
+      </div>
     </div>
+
   </div>
 
   <!-- ===================== СПРАВКА ===================== -->
-  <div class="toolbar" id="tb-help" style="display:none">
-    <div class="group"><div class="group-title">Справка</div>
-      <button data-act="hotkeys">⌨ Горячие клавиши</button>
-      <button data-act="about">ℹ О программе</button>
-      <button data-act="feedback">✉ Обратная связь</button>
+  <div class="panel" id="tb-help" style="display:none">
+    <div class="grp">
+      <div class="grp-title">Справка</div>
+      <div class="grp-body column">
+        <div class="row"><button data-act="hotkeys">⌨ Горячие клавиши</button></div>
+        <div class="row"><button data-act="about">ℹ О программе</button></div>
+        <div class="row"><button data-act="feedback">✉ Обратная связь</button></div>
+        <div class="row"><button data-act="whats-new">🆕 Что нового</button></div>
+        <div class="row"><button data-act="training">📚 Обучение</button></div>
+      </div>
+    </div>
+    <div class="grp">
+      <div class="grp-title">Помощь</div>
+      <div class="grp-body column">
+        <div class="row"><button data-act="contact-support">💬 Поддержка</button></div>
+        <div class="row"><button data-act="community">👥 Сообщество</button></div>
+        <div class="row"><button data-act="privacy">🔒 Приватность</button></div>
+      </div>
+    </div>
+    <div class="grp">
+      <div class="grp-title">Улучшения</div>
+      <div class="grp-body column">
+        <div class="row"><button data-act="show-training">Показать обучение</button></div>
+        <div class="row"><button data-act="disable-help">Отключить подсказки</button></div>
+      </div>
     </div>
   </div>
+
 </div>
 
-<!-- Рабочая область -->
+<!-- ====== ЛИНЕЙКА ====== -->
+<div class="ruler" id="ruler">
+  <div class="ruler-tick"></div>
+  <div class="ruler-tick"></div>
+  <div class="ruler-tick"></div>
+  <div class="ruler-tick"></div>
+  <div class="ruler-tick"></div>
+  <div class="ruler-tick"></div>
+  <div class="ruler-tick"></div>
+  <div class="ruler-tick"></div>
+</div>
+
+<!-- ====== РАБОЧАЯ ОБЛАСТЬ ====== -->
 <div class="workspace">
   <div class="page" id="page">
     <div id="editor" contenteditable="true" spellcheck="true"></div>
   </div>
 </div>
 
-<!-- Статус-бар -->
+<!-- ====== СТАТУС-БАР ====== -->
 <div class="statusbar">
+  <span id="stat-page">Стр. 1 из 1</span>
   <span id="stat-words">Слов: 0</span>
   <span id="stat-chars">Символов: 0</span>
-  <span id="stat-pages">Стр.: 1</span>
   <span id="stat-lang">Русский</span>
-  <span id="stat-zoom">Масштаб: 100%</span>
+  <span class="spacer"></span>
+  <button data-act="view-read" class="sb-btn">📖</button>
+  <button data-act="view-print" class="sb-btn">🖨</button>
+  <button data-act="view-web" class="sb-btn">🌐</button>
+  <span id="stat-zoom-info">Масштаб: 100%</span>
+  <button data-act="zoom-out" class="sb-btn">−</button>
+  <input type="range" id="zoom-slider" min="50" max="200" value="100" step="10">
+  <button data-act="zoom-in" class="sb-btn">+</button>
 </div>
 
 <input type="file" id="file-input" accept=".txt,.html,.htm,.docx" style="display:none">
