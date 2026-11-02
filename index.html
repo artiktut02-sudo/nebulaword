@@ -2,25 +2,56 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title>Мамин Редактор</title>
+<title>Мамин Редактор — почти Word</title>
 <link rel="stylesheet" href="style.css">
+<!-- Библиотеки для docx -->
+<script src="https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html-docx-js@0.3.1/dist/html-docx.js"></script>
 </head>
 <body>
 
-<!-- Лента как в Word -->
+<!-- Верхняя панель как в Word -->
+<div class="titlebar">
+  <span class="app-name">Мамин Редактор</span>
+  <span class="doc-name" id="docName">Документ1</span>
+</div>
+
+<!-- Вкладки -->
 <div class="ribbon">
   <div class="tab-bar">
-    <button class="tab active">Главная</button>
-    <button class="tab">Вставка</button>
-    <button class="tab">Вид</button>
+    <button class="tab" data-tab="file">Файл</button>
+    <button class="tab active" data-tab="home">Главная</button>
+    <button class="tab" data-tab="insert">Вставка</button>
+    <button class="tab" data-tab="design">Дизайн</button>
+    <button class="tab" data-tab="layout">Макет</button>
+    <button class="tab" data-tab="references">Ссылки</button>
+    <button class="tab" data-tab="review">Рецензирование</button>
+    <button class="tab" data-tab="view">Вид</button>
   </div>
 
-  <div class="toolbar">
+  <!-- ФАЙЛ -->
+  <div class="toolbar" id="tb-file" style="display:none">
     <div class="group">
-      <button id="btn-undo" title="Отменить">↶</button>
-      <button id="btn-redo" title="Повторить">↷</button>
+      <button id="btn-new">📄 Создать</button>
+      <button id="btn-open">📂 Открыть</button>
+      <button id="btn-save">💾 Сохранить</button>
     </div>
+    <div class="group">
+      <button id="btn-save-html">Сохранить как HTML</button>
+      <button id="btn-save-docx">Сохранить как DOCX</button>
+    </div>
+    <div class="group">
+      <button id="btn-print">🖨 Печать</button>
+    </div>
+  </div>
 
+  <!-- ГЛАВНАЯ -->
+  <div class="toolbar" id="tb-home">
+    <div class="group">
+      <button id="btn-paste" title="Вставить">📋 Вставить</button>
+      <button id="btn-cut" title="Вырезать">✂️</button>
+      <button id="btn-copy" title="Копировать">📑</button>
+    </div>
     <div class="group">
       <select id="font-family">
         <option>Times New Roman</option>
@@ -28,52 +59,167 @@
         <option>Calibri</option>
         <option>Courier New</option>
         <option>Georgia</option>
+        <option>Verdana</option>
       </select>
       <select id="font-size">
-        <option>10</option><option>11</option><option>12</option>
-        <option selected>14</option><option>16</option>
-        <option>18</option><option>24</option><option>32</option>
+        <option>8</option><option>9</option><option>10</option>
+        <option>11</option><option>12</option><option selected>14</option>
+        <option>16</option><option>18</option><option>20</option>
+        <option>24</option><option>28</option><option>32</option>
+        <option>48</option>
       </select>
+      <button id="btn-grow">A+</button>
+      <button id="btn-shrink">A−</button>
     </div>
-
     <div class="group">
-      <button id="btn-bold" title="Жирный"><b>Ж</b></button>
-      <button id="btn-italic" title="Курсив"><i>К</i></button>
-      <button id="btn-underline" title="Подчёркнутый"><u>Ч</u></button>
-      <button id="btn-strike" title="Зачёркнутый"><s>З</s></button>
+      <button id="btn-bold"><b>Ж</b></button>
+      <button id="btn-italic"><i>К</i></button>
+      <button id="btn-underline"><u>Ч</u></button>
+      <button id="btn-strike"><s>З</s></button>
+      <button id="btn-subscript">X₂</button>
+      <button id="btn-superscript">X²</button>
     </div>
-
     <div class="group">
-      <button id="btn-align-left" title="По левому краю">≡←</button>
-      <button id="btn-align-center" title="По центру">≡↔</button>
-      <button id="btn-align-right" title="По правому краю">→≡</button>
-      <button id="btn-align-justify" title="По ширине">≡≡</button>
+      <input type="color" id="text-color" value="#000000" title="Цвет текста">
+      <input type="color" id="highlight-color" value="#ffff00" title="Цвет выделения">
     </div>
-
     <div class="group">
-      <button id="btn-ul" title="Маркированный список">• Список</button>
-      <button id="btn-ol" title="Нумерованный список">1. Список</button>
+      <button id="btn-ul">• Список</button>
+      <button id="btn-ol">1. Список</button>
+      <button id="btn-indent">→ Отступ</button>
+      <button id="btn-outdent">← Отступ</button>
     </div>
-
     <div class="group">
-      <button id="btn-open" title="Открыть">📂 Открыть</button>
-      <button id="btn-save" title="Сохранить">💾 Сохранить</button>
-      <button id="btn-print" title="Печать">🖨 Печать</button>
+      <button id="btn-align-left">⯇</button>
+      <button id="btn-align-center">☰</button>
+      <button id="btn-align-right">⯈</button>
+      <button id="btn-align-justify">≡</button>
+    </div>
+    <div class="group">
+      <button id="btn-undo">↶</button>
+      <button id="btn-redo">↷</button>
+    </div>
+  </div>
+
+  <!-- ВСТАВКА -->
+  <div class="toolbar" id="tb-insert" style="display:none">
+    <div class="group">
+      <button id="btn-image">🖼 Изображение</button>
+    </div>
+    <div class="group">
+      <button id="btn-link">🔗 Ссылка</button>
+      <button id="btn-hr">— Горизонтальная линия</button>
+    </div>
+    <div class="group">
+      <button id="btn-table">▦ Таблица</button>
+    </div>
+    <div class="group">
+      <button id="btn-date">📅 Дата</button>
+      <button id="btn-time">⏰ Время</button>
+    </div>
+    <div class="group">
+      <button id="btn-page-break">⤓ Разрыв страницы</button>
+    </div>
+  </div>
+
+  <!-- ДИЗАЙН -->
+  <div class="toolbar" id="tb-design" style="display:none">
+    <div class="group">
+      <label>Тема листа:
+        <select id="page-theme">
+          <option value="white">Белый</option>
+          <option value="cream">Кремовый</option>
+          <option value="lightblue">Голубой</option>
+        </select>
+      </label>
+    </div>
+    <div class="group">
+      <label>Цвет текста по умолчанию: <input type="color" id="default-text" value="#000000"></label>
+    </div>
+  </div>
+
+  <!-- МАКЕТ -->
+  <div class="toolbar" id="tb-layout" style="display:none">
+    <div class="group">
+      <label>Поля:
+        <select id="margins">
+          <option value="normal">Обычные</option>
+          <option value="narrow">Узкие</option>
+          <option value="wide">Широкие</option>
+        </select>
+      </label>
+    </div>
+    <div class="group">
+      <label>Ориентация:
+        <select id="orientation">
+          <option value="portrait">Книжная</option>
+          <option value="landscape">Альбомная</option>
+        </select>
+      </label>
+    </div>
+    <div class="group">
+      <label>Межстрочный:
+        <select id="line-height">
+          <option value="1">1.0</option>
+          <option value="1.15">1.15</option>
+          <option value="1.5" selected>1.5</option>
+          <option value="2">2.0</option>
+        </select>
+      </label>
+    </div>
+  </div>
+
+  <!-- ССЫЛКИ -->
+  <div class="toolbar" id="tb-references" style="display:none">
+    <div class="group">
+      <button id="btn-toc">📑 Оглавление</button>
+    </div>
+    <div class="group">
+      <button id="btn-footnote">Сноска</button>
+    </div>
+  </div>
+
+  <!-- РЕЦЕНЗИРОВАНИЕ -->
+  <div class="toolbar" id="tb-review" style="display:none">
+    <div class="group">
+      <button id="btn-spell">🔍 Проверка орфографии</button>
+    </div>
+    <div class="group">
+      <button id="btn-wordcount">📊 Статистика</button>
+    </div>
+  </div>
+
+  <!-- ВИД -->
+  <div class="toolbar" id="tb-view" style="display:none">
+    <div class="group">
+      <button id="btn-zoom-in">🔍+</button>
+      <button id="btn-zoom-out">🔍−</button>
+      <span id="zoom-label">100%</span>
+    </div>
+    <div class="group">
+      <button id="btn-fullscreen">⛶ Во весь экран</button>
     </div>
   </div>
 </div>
 
-<!-- Лист как в Word -->
+<!-- Рабочая область -->
 <div class="workspace">
-  <div class="page">
+  <div class="page" id="page">
     <div id="editor" contenteditable="true" spellcheck="true">
       <p>Здравствуй, мама! Начни печатать здесь...</p>
     </div>
   </div>
 </div>
 
-<!-- Скрытый input для открытия файлов -->
-<input type="file" id="file-input" accept=".txt,.html,.doc" style="display:none">
+<!-- Статус-бар -->
+<div class="statusbar">
+  <span id="stat-words">Слов: 0</span>
+  <span id="stat-chars">Символов: 0</span>
+  <span id="stat-page">Стр. 1</span>
+</div>
+
+<input type="file" id="file-input" accept=".txt,.html,.htm,.docx" style="display:none">
+<input type="file" id="image-input" accept="image/*" style="display:none">
 
 <script src="script.js"></script>
 </body>
